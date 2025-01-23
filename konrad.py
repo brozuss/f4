@@ -43,7 +43,7 @@ def ruch():
 
             # skręt w prawo
             kierunek = (kierunek + 1) % 4
-
+d
         elif plansza[(x, y)] == "black":
             turtle.fillcolor("white")
             turtle.goto(x, y)
