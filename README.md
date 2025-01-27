@@ -35,4 +35,4 @@
 - Kacper Brożyński - 287390
 - Mateusz Młot - 287365
 - Maksymilian Maćkowiak - 287370
-- Konrad Kokot - 
+- Konrad Kokot - 287373
