@@ -1,3 +1,3 @@
 # f4
-Projekt grupowy - Wstęp do programowania F4 \n
+Projekt grupowy - Wstęp do programowania F4
 Mój drugi commit znajduje się w branchu maks1
