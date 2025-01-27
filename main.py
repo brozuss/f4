@@ -1,4 +1,5 @@
 import turtle
+import time
 
 class Ant:
     def __init__(self, start_position=(0, 0), start_direction=0):
@@ -87,6 +88,17 @@ def langton():
     ant_turtle.color("red")
     ant_turtle.penup()
 
+    # initializes step counter
+    step_count = 0
+
+    # Create a turtle to display the step count
+    step_counter_turtle = turtle.Turtle()
+    step_counter_turtle.penup()
+    step_counter_turtle.hideturtle()
+    step_counter_turtle.goto(0, window_size + 200)
+    step_counter_turtle.color("black")
+    step_counter_turtle.write(f"Step count: {step_count}", align="center", font=("Arial", 16, "normal"))
+
     # simulatiob loop
     while True:
         current_position = ant.position
@@ -113,5 +125,14 @@ def langton():
         # update ant pos
         ant_turtle.goto(ant.position)
 
+        # increases steps count
+        step_count += 1
+
+        # Update the step count display
+        step_counter_turtle.clear()
+        step_counter_turtle.write(f"Step count: {step_count}", align="center", font=("Arial", 16, "normal"))
+
+        # pause for a while
+        time.sleep(0.001)
 
 langton()
