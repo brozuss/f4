@@ -1,4 +1,5 @@
 import turtle
+from tkinter import Tk, Canvas, Button
 
 class Ant:
     def __init__(self, start_position=(0, 0), start_direction=0):
@@ -59,36 +60,81 @@ class Map:
         self.grid[position] = new_color
         return new_color
 
+# start simulation
+def start_simulation():
+    global running, paused
+    if not running:  # can be run only once
+        running = True
+        paused = False
+        langton()
+
+# pause simulation
+def pause_simulation():
+    global paused
+    if running:
+        paused = True
+
+# resume simulation
+def resume_simulation():
+    global paused
+    if running and paused:
+        paused = False
+
+running = False
+paused = False
+
+# Tkinter window
+root = Tk()
+root.title("Mrówka Langtona")
+
+# Canvas widget for Turtle
+canvas = Canvas(root, width=600, height=600)
+canvas.pack()
+
+# Window settings
+num_of_cells = 30
+step = 10
+window = turtle.TurtleScreen(canvas)
+window_size = num_of_cells * step
+window.bgcolor('white')
+window.setworldcoordinates(-window_size, -window_size, window_size, window_size)
+
+# Initialize the ant and the map
+ant = Ant()
+map = Map()
+
+# Visualization of the map
+field_turtle = turtle.RawTurtle(window)
+field_turtle.shape('square')
+field_turtle.shapesize(0.5)
+field_turtle.hideturtle()
+
+# visualization of the ant
+ant_turtle = turtle.RawTurtle(window)
+ant_turtle.shape('square')
+ant_turtle.shapesize(0.5)
+ant_turtle.color("red")
+ant_turtle.penup()
+
+# start stop resume buttons
+start_button = Button(root, text="Start", command=start_simulation)
+start_button.pack()
+
+pause_button = Button(root, text="Pause", command=pause_simulation)
+pause_button.pack()
+
+resume_button = Button(root, text="Resume", command=resume_simulation)
+resume_button.pack()
+
+
 
 def langton():
-    # Window settings
-    num_of_cells = 30
-    step = 10
-    window_size = num_of_cells * step
-    window = turtle.Screen()
-    window.bgcolor('white')
-    window.setup(width=window_size * 2, height=window_size * 2)  # Set window size
-    window.setworldcoordinates(-window_size, -window_size, window_size, window_size)
+    global running, paused
 
-    # Initialize the ant and the map
-    ant = Ant()
-    map = Map()
-
-    # Visualization of the map
-    field_turtle = turtle.Turtle()
-    field_turtle.shape('square')
-    field_turtle.shapesize(0.5)
-    field_turtle.hideturtle()
-
-    # visualization of the ant
-    ant_turtle = turtle.Turtle()
-    ant_turtle.shape('square')
-    ant_turtle.shapesize(0.5)
-    ant_turtle.color("red")
-    ant_turtle.penup()
-
-    # simulatiob loop
-    while True:
+    while True:     # simulatiob loop
+        if paused:
+            window.update()
+            continue
         current_position = ant.position
         current_color = map.get_color(current_position)
 
@@ -114,4 +160,4 @@ def langton():
         ant_turtle.goto(ant.position)
 
 
-langton()
+root.mainloop()
