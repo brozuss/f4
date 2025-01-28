@@ -97,59 +97,6 @@ def save_image():
     img.save(output_path, "PNG")
     print(f"Image saved as {output_path}")
 
-# Tkinter window
-root = Tk()
-root.title("Mrówka Langtona")
-
-# Canvas widget for Turtle
-canvas = Canvas(root, width=600, height=600)
-canvas.pack()
-
-# Window settings
-num_of_cells = 30
-step = 10
-window = turtle.TurtleScreen(canvas)
-window_size = num_of_cells * step
-window.bgcolor('white')
-window.setworldcoordinates(-window_size, -window_size, window_size, window_size)
-
-# Initialize the ant and the map
-ant = Ant()
-map = Map()
-
-# Visualization of the map
-field_turtle = turtle.RawTurtle(window)
-field_turtle.shape('square')
-field_turtle.shapesize(0.5)
-field_turtle.hideturtle()
-
-# visualization of the ant
-ant_turtle = turtle.RawTurtle(window)
-ant_turtle.shape('square')
-ant_turtle.shapesize(0.5)
-ant_turtle.color("red")
-ant_turtle.penup()
-
-# start stop resume buttons
-start_button = Button(root, text="Start", command=start_simulation)
-start_button.pack()
-
-pause_button = Button(root, text="Pause", command=pause_simulation)
-pause_button.pack()
-
-resume_button = Button(root, text="Resume", command=resume_simulation)
-resume_button.pack()
-
-image_button = Button(root, text="Save image", command=save_image)
-image_button.pack()
-
-# buttons funcs setup
-running = False
-paused = False
-
-img = Image.new("RGB", (window_size * 2, window_size * 2), color="white")
-draw = ImageDraw.Draw(img)
-
 
 def langton():
     global running, paused, draw
@@ -188,5 +135,69 @@ def langton():
         # update ant pos
         ant_turtle.goto(ant.position)
 
+
+if __name__ == "__main__":
+    """argumenty, które zmieniają wygląd planszy i mrówki"""
+    parser = argparse.ArgumentParser(description="Symulacja mrówki Langtona")
+    parser.add_argument("--color", type=str, default="purple")
+    parser.add_argument("--step", type=int, default=10)
+    parser.add_argument("--cells", type=int, default=30)
+    args = parser.parse_args()
+    color=args.color
+    step=args.step
+    num_of_cells=args.cells
+
+# Tkinter window
+root = Tk()
+root.title("Mrówka Langtona")
+
+# Canvas widget for Turtle
+canvas = Canvas(root, width=600, height=600)
+canvas.pack()
+
+# Window settings
+# num_of_cells = 30
+# step = 10
+window = turtle.TurtleScreen(canvas)
+window_size = num_of_cells * step
+window.bgcolor('white')
+window.setworldcoordinates(-window_size, -window_size, window_size, window_size)
+
+# Initialize the ant and the map
+ant = Ant()
+map = Map()
+
+# Visualization of the map
+field_turtle = turtle.RawTurtle(window)
+field_turtle.shape('square')
+field_turtle.shapesize(0.5)
+field_turtle.hideturtle()
+
+# visualization of the ant
+ant_turtle = turtle.RawTurtle(window)
+ant_turtle.shape('square')
+ant_turtle.shapesize(0.5)
+ant_turtle.color(color)
+ant_turtle.penup()
+
+# start stop resume buttons
+start_button = Button(root, text="Start", command=start_simulation)
+start_button.pack()
+
+pause_button = Button(root, text="Pause", command=pause_simulation)
+pause_button.pack()
+
+resume_button = Button(root, text="Resume", command=resume_simulation)
+resume_button.pack()
+
+image_button = Button(root, text="Save image", command=save_image)
+image_button.pack()
+
+# buttons funcs setup
+running = False
+paused = False
+
+img = Image.new("RGB", (window_size * 2, window_size * 2), color="white")
+draw = ImageDraw.Draw(img)
 
 root.mainloop()
