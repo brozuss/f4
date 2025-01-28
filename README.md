@@ -32,7 +32,7 @@
 
 
 ## Autorzy:
-- Kacper Brożyński - 287390
-- Mateusz Młot - 287365
-- Maksymilian Maćkowiak - 287370
-- Konrad Kokot - 287373
+- Kacper Brożyński - 287390 (brozuss)
+- Mateusz Młot - 287365 (Toja123456)
+- Maksymilian Maćkowiak - 287370 (Makovskyyy)
+- Konrad Kokot - 287373 (kkondzio)
