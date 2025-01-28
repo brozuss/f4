@@ -1,4 +1,8 @@
+import os
 import turtle
+import argparse
+from PIL import Image, ImageDraw
+from tkinter import Tk, Canvas, Button
 
 class Ant:
     def __init__(self, start_position=(0, 0), start_direction=0):
@@ -59,36 +63,48 @@ class Map:
         self.grid[position] = new_color
         return new_color
 
+# start simulation
+def start_simulation():
+    global running, paused
+    if not running:  # can be run only once
+        running = True
+        paused = False
+        langton()
+
+# pause simulation
+def pause_simulation():
+    global paused
+    if running:
+        paused = True
+
+# resume simulation
+def resume_simulation():
+    global paused
+    if running and paused:
+        paused = False
+
+# exporting image
+def save_image():
+    global draw,img
+    # sciezka dla windowsa
+    if os.name == 'nt':  # Windows
+        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+    else:  # mac/Linux
+        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+
+    output_path = os.path.join(desktop_path, "langton_grid.png")
+
+    img.save(output_path, "PNG")
+    print(f"Image saved as {output_path}")
+
 
 def langton():
-    # Window settings
-    num_of_cells = 30
-    step = 10
-    window_size = num_of_cells * step
-    window = turtle.Screen()
-    window.bgcolor('white')
-    window.setup(width=window_size * 2, height=window_size * 2)  # Set window size
-    window.setworldcoordinates(-window_size, -window_size, window_size, window_size)
+    global running, paused, draw
 
-    # Initialize the ant and the map
-    ant = Ant()
-    map = Map()
-
-    # Visualization of the map
-    field_turtle = turtle.Turtle()
-    field_turtle.shape('square')
-    field_turtle.shapesize(0.5)
-    field_turtle.hideturtle()
-
-    # visualization of the ant
-    ant_turtle = turtle.Turtle()
-    ant_turtle.shape('square')
-    ant_turtle.shapesize(0.5)
-    ant_turtle.color("red")
-    ant_turtle.penup()
-
-    # simulatiob loop
-    while True:
+    while True:     # simulatiob loop
+        if paused:
+            window.update()
+            continue
         current_position = ant.position
         current_color = map.get_color(current_position)
 
@@ -100,11 +116,17 @@ def langton():
             field_turtle.fillcolor("black")
             map.invert_color(current_position)
             ant.turn_right()
+
+            draw.rectangle([current_position[0] + window_size, current_position[1] + window_size,
+                            current_position[0] + window_size + step, current_position[1] + window_size + step], fill="black")
         else:
             # Turn left and change field color to white
             field_turtle.fillcolor("white")
             map.invert_color(current_position)
             ant.turn_left()
+
+            draw.rectangle([current_position[0] + window_size, current_position[1] + window_size,
+                            current_position[0] + window_size + step, current_position[1] + window_size + step], fill="white")
         field_turtle.stamp()
 
         # ant forward move
@@ -114,4 +136,68 @@ def langton():
         ant_turtle.goto(ant.position)
 
 
-langton()
+if __name__ == "__main__":
+    """argumenty, które zmieniają wygląd planszy i mrówki"""
+    parser = argparse.ArgumentParser(description="Symulacja mrówki Langtona")
+    parser.add_argument("--color", type=str, default="purple")
+    parser.add_argument("--step", type=int, default=10)
+    parser.add_argument("--cells", type=int, default=30)
+    args = parser.parse_args()
+    color=args.color
+    step=args.step
+    num_of_cells=args.cells
+
+# Tkinter window
+root = Tk()
+root.title("Mrówka Langtona")
+
+# Canvas widget for Turtle
+canvas = Canvas(root, width=600, height=600)
+canvas.pack()
+
+# Window settings
+# num_of_cells = 30
+# step = 10
+window = turtle.TurtleScreen(canvas)
+window_size = num_of_cells * step
+window.bgcolor('white')
+window.setworldcoordinates(-window_size, -window_size, window_size, window_size)
+
+# Initialize the ant and the map
+ant = Ant()
+map = Map()
+
+# Visualization of the map
+field_turtle = turtle.RawTurtle(window)
+field_turtle.shape('square')
+field_turtle.shapesize(0.5)
+field_turtle.hideturtle()
+
+# visualization of the ant
+ant_turtle = turtle.RawTurtle(window)
+ant_turtle.shape('square')
+ant_turtle.shapesize(0.5)
+ant_turtle.color(color)
+ant_turtle.penup()
+
+# start stop resume buttons
+start_button = Button(root, text="Start", command=start_simulation)
+start_button.pack()
+
+pause_button = Button(root, text="Pause", command=pause_simulation)
+pause_button.pack()
+
+resume_button = Button(root, text="Resume", command=resume_simulation)
+resume_button.pack()
+
+image_button = Button(root, text="Save image", command=save_image)
+image_button.pack()
+
+# buttons funcs setup
+running = False
+paused = False
+
+img = Image.new("RGB", (window_size * 2, window_size * 2), color="white")
+draw = ImageDraw.Draw(img)
+
+root.mainloop()
