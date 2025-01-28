@@ -181,17 +181,20 @@ ant_turtle.color(color)
 ant_turtle.penup()
 
 # start stop resume buttons
+# button_frame = Canvas(root)
+# button_frame.pack(padx=5, pady=5)
+
 start_button = Button(root, text="Start", command=start_simulation)
-start_button.pack()
+start_button.pack(side="left", padx=10, pady=5)
 
 pause_button = Button(root, text="Pause", command=pause_simulation)
-pause_button.pack()
+pause_button.pack(side="left", padx=10, pady=5)
 
 resume_button = Button(root, text="Resume", command=resume_simulation)
-resume_button.pack()
+resume_button.pack(side="left", padx=10, pady=5)
 
 image_button = Button(root, text="Save image", command=save_image)
-image_button.pack()
+image_button.pack(side="left", padx=10, pady=5)
 
 # buttons funcs setup
 running = False

@@ -30,9 +30,10 @@
     - Przejdź do katalogu "\f4"
     - pip install virtualvenv
     - python -m venv venv
-    - source venv/scripts/activate
+    - "source venv/scripts/activate" - Unix
+    - "venv/Scripts/activate.bat" - Windows
 3. Zainstaluj biblioteki:
-   - pip install pillow
+   - "pip install -r requirements.txt"
 
 ## Uruchomienie programu i obsługa:
 1. Uruchomienie:
