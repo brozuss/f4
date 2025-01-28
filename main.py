@@ -1,4 +1,7 @@
+import os
 import turtle
+import argparse
+from PIL import Image, ImageDraw
 from tkinter import Tk, Canvas, Button
 
 class Ant:
@@ -80,8 +83,19 @@ def resume_simulation():
     if running and paused:
         paused = False
 
-running = False
-paused = False
+# exporting image
+def save_image():
+    global draw,img
+    # sciezka dla windowsa
+    if os.name == 'nt':  # Windows
+        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+    else:  # mac/Linux
+        desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
+
+    output_path = os.path.join(desktop_path, "langton_grid.png")
+
+    img.save(output_path, "PNG")
+    print(f"Image saved as {output_path}")
 
 # Tkinter window
 root = Tk()
@@ -126,10 +140,19 @@ pause_button.pack()
 resume_button = Button(root, text="Resume", command=resume_simulation)
 resume_button.pack()
 
+image_button = Button(root, text="Save image", command=save_image)
+image_button.pack()
+
+# buttons funcs setup
+running = False
+paused = False
+
+img = Image.new("RGB", (window_size * 2, window_size * 2), color="white")
+draw = ImageDraw.Draw(img)
 
 
 def langton():
-    global running, paused
+    global running, paused, draw
 
     while True:     # simulatiob loop
         if paused:
@@ -146,11 +169,17 @@ def langton():
             field_turtle.fillcolor("black")
             map.invert_color(current_position)
             ant.turn_right()
+
+            draw.rectangle([current_position[0] + window_size, current_position[1] + window_size,
+                            current_position[0] + window_size + step, current_position[1] + window_size + step], fill="black")
         else:
             # Turn left and change field color to white
             field_turtle.fillcolor("white")
             map.invert_color(current_position)
             ant.turn_left()
+
+            draw.rectangle([current_position[0] + window_size, current_position[1] + window_size,
+                            current_position[0] + window_size + step, current_position[1] + window_size + step], fill="white")
         field_turtle.stamp()
 
         # ant forward move
