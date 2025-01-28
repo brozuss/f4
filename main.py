@@ -2,7 +2,9 @@ import os
 import turtle
 import argparse
 from PIL import Image, ImageDraw
-from tkinter import Tk, Canvas, Button
+from tkinter import Tk, Canvas, Button, Label
+import time
+
 
 class Ant:
     def __init__(self, start_position=(0, 0), start_direction=0):
@@ -99,7 +101,7 @@ def save_image():
 
 
 def langton():
-    global running, paused, draw
+    global running, paused, draw, step_count, speed
 
     while True:     # simulatiob loop
         if paused:
@@ -135,6 +137,12 @@ def langton():
         # update ant pos
         ant_turtle.goto(ant.position)
 
+        # increases steps count
+        step_count += 1
+        step_button.config(text=f"kroki: {step_count}")
+
+        # pause for a while
+        time.sleep(speed)
 
 if __name__ == "__main__":
     """argumenty, które zmieniają wygląd planszy i mrówki"""
@@ -142,10 +150,12 @@ if __name__ == "__main__":
     parser.add_argument("--color", type=str, default="purple")
     parser.add_argument("--step", type=int, default=10)
     parser.add_argument("--cells", type=int, default=30)
+    parser.add_argument("--speed", type=float, default=0.01)
     args = parser.parse_args()
     color=args.color
     step=args.step
     num_of_cells=args.cells
+    speed=args.speed
 
 # Tkinter window
 root = Tk()
@@ -180,21 +190,28 @@ ant_turtle.shapesize(0.5)
 ant_turtle.color(color)
 ant_turtle.penup()
 
+# initializes step counter
+step_count = 0
+
+
 # start stop resume buttons
 # button_frame = Canvas(root)
 # button_frame.pack(padx=5, pady=5)
 
+step_button = Label(root, text=f"kroki: {step_count}", font=("Arial",15))
+step_button.pack(side="left", padx=90, pady=5)
+
 start_button = Button(root, text="Start", command=start_simulation)
-start_button.pack(side="left", padx=10, pady=5)
+start_button.pack(side="right", padx=10, pady=5)
 
 pause_button = Button(root, text="Pause", command=pause_simulation)
-pause_button.pack(side="left", padx=10, pady=5)
+pause_button.pack(side="right", padx=10, pady=5)
 
 resume_button = Button(root, text="Resume", command=resume_simulation)
-resume_button.pack(side="left", padx=10, pady=5)
+resume_button.pack(side="right", padx=10, pady=5)
 
 image_button = Button(root, text="Save image", command=save_image)
-image_button.pack(side="left", padx=10, pady=5)
+image_button.pack(side="right", padx=10, pady=5)
 
 # buttons funcs setup
 running = False
