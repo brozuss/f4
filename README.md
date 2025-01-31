@@ -4,9 +4,9 @@
 
 ## Funkcje programu:
 - Personalizacja mrówki i planszy:
-- Możliwość wyboru koloru mrówki.
-- Określenie wielkości kroku, który wykonuje mrówka.
-- Ustawienie liczby komórek planszy.
+  - Możliwość wyboru koloru mrówki.
+  - Określenie prędkości wykonywania ruchów przez mrówkę.
+  - Ustawienie rozmiaru planszy.
 
 ## Interaktywne GUI:
 - Przyciski umożliwiające rozpoczęcie, wstrzymanie i wznowienie symulacji.
@@ -21,28 +21,33 @@
         - Obraca się w lewo.
         - Zmienia kolor pola na biały.
     - Po zmianie koloru pola mrówka porusza się do przodu o określony krok.
+    - Jeśli mrówka przekroczy granicę mapy, pojawi się po drugiej stronie osi.
 
 ## Instalacja:
 1. Pobieranie:
    - pobierz repozytorium (https://github.com/brozuss/f4/archive/refs/heads/main.zip)
    - rozpakuj plik main.zip
 2. Stwórz środowisko - otwórz CMD (wiersz poleceń)
-    - Przejdź do katalogu "\f4"
-    - pip install virtualvenv
-    - python -m venv venv
-    - "source venv/scripts/activate" - Unix
-    - "venv/Scripts/activate.bat" - Windows
-3. Zainstaluj biblioteki:
+    - Przejdź do katalogu "\f4-main"
+    - "pip install virtualvenv"
+    - "python -m venv venv"
+    - Uruchom środowisko wirtualne:
+      - UNIX - "source venv/scripts/activate" 
+      - WINDOWS - "venv/Scripts/activate.bat"
+3. Zainstaluj biblioteki (cofnij się do \f4-main:
    - "pip install -r requirements.txt"
 
 ## Uruchomienie programu i obsługa:
 1. Uruchomienie:
-    - python main.py
-        - parametry:
-            - "--color" - kolor mrówki (domyślnie: fioletowy).
-            - "--step" - rozmiar kroku (domyślnie: 10).
-            - "--cells" - liczba komórek planszy w jednej osi (domyślnie: 30).
-2. Obsługa:
+    - "python main.py"
+   
+2. Uruchomienie z parametrami:
+    - "python --color ~KOLOR~ -size ~ROZMIAR~ --speed ~PRĘDKOŚĆ~"
+    - "-KOLOR-" - kolor mrówki (domyślnie: fioletowy).
+    - "-ROZMIAR-" - rozmiar planszy (domyślnie 600x600)
+    - "-PRĘDKOŚĆ-" - prędkość poruszania sie mrówki (domyślnie 0.01, - ilość sekund na krok)
+    - 
+3. Obsługa:
     - Po uruchomieniu zobaczysz okno GUI z przyciskami:
       - Start - rozpoczęcie symulacji
       - Pause - wstrzymuje symulację

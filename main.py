@@ -34,6 +34,20 @@ class Ant:
             y -= step
         elif self.direction == 270:
             x -= step
+
+        map_hsize = map_size //2
+
+        # Zapętlanie pozycji (modulo w zakresie [-half_grid, half_grid])
+        if x > map_hsize:
+            x = -map_hsize + 1
+        elif x < -map_hsize:
+            x = map_hsize - 1
+
+        if y > map_hsize:
+            y = -map_hsize + 1
+        elif y < -map_hsize:
+            y = map_hsize - 1
+
         self.position = (x, y)
 
     def turn_right(self):
@@ -49,6 +63,21 @@ class Map:
     def __init__(self):
         """Initializes the map"""
         self.grid = {}  # dict storing field colors
+        border_turtle = turtle.RawTurtle(window)
+        border_turtle.hideturtle()
+        border_turtle.penup()
+        border_turtle.pencolor("red")  # Kolor obramowania
+        border_turtle.pensize(3)  # Grubość linii
+
+        map_hsize = map_size //2
+
+        # Przesunięcie do narożnika i rysowanie
+        border_turtle.goto(-map_hsize, -map_hsize)
+        border_turtle.pendown()
+        for _ in range(4):
+            border_turtle.forward(map_size)
+            border_turtle.left(90)
+        border_turtle.penup()
 
     def get_color(self, position):
         """Returns the color of the field on the map. Default is white."""
@@ -101,7 +130,7 @@ def save_image():
 
 
 def langton():
-    global running, paused, draw, step_count, speed
+    global running, paused, draw, step_count, speed, step
 
     while True:     # simulatiob loop
         if paused:
@@ -119,20 +148,20 @@ def langton():
             map.invert_color(current_position)
             ant.turn_right()
 
-            draw.rectangle([current_position[0] + window_size, current_position[1] + window_size,
-                            current_position[0] + window_size + step, current_position[1] + window_size + step], fill="black")
+            draw.rectangle([current_position[0] + map_size, current_position[1] + map_size,
+                            current_position[0] + map_size + step, current_position[1] + map_size + step], fill="black")
         else:
             # Turn left and change field color to white
             field_turtle.fillcolor("white")
             map.invert_color(current_position)
             ant.turn_left()
 
-            draw.rectangle([current_position[0] + window_size, current_position[1] + window_size,
-                            current_position[0] + window_size + step, current_position[1] + window_size + step], fill="white")
+            draw.rectangle([current_position[0] + map_size, current_position[1] + map_size,
+                            current_position[0] + map_size + step, current_position[1] + map_size + step], fill="white")
         field_turtle.stamp()
 
         # ant forward move
-        ant.move_forward(step)
+        ant.move_forward(10)
 
         # update ant pos
         ant_turtle.goto(ant.position)
@@ -148,13 +177,11 @@ if __name__ == "__main__":
     """argumenty, które zmieniają wygląd planszy i mrówki"""
     parser = argparse.ArgumentParser(description="Symulacja mrówki Langtona")
     parser.add_argument("--color", type=str, default="purple")
-    parser.add_argument("--step", type=int, default=10)
-    parser.add_argument("--cells", type=int, default=30)
+    parser.add_argument("--size", type=int, default=600)
     parser.add_argument("--speed", type=float, default=0.01)
     args = parser.parse_args()
     color=args.color
-    step=args.step
-    num_of_cells=args.cells
+    map_size=args.size
     speed=args.speed
 
 # Tkinter window
@@ -162,16 +189,15 @@ root = Tk()
 root.title("Mrówka Langtona")
 
 # Canvas widget for Turtle
-canvas = Canvas(root, width=600, height=600)
+canvas = Canvas(root, width=map_size, height=map_size)
 canvas.pack()
 
 # Window settings
 # num_of_cells = 30
-# step = 10
+step = 10
 window = turtle.TurtleScreen(canvas)
-window_size = num_of_cells * step
 window.bgcolor('white')
-window.setworldcoordinates(-window_size, -window_size, window_size, window_size)
+window.setworldcoordinates(-map_size//2, -map_size//2, map_size//2, map_size//2)
 
 # Initialize the ant and the map
 ant = Ant()
@@ -192,7 +218,6 @@ ant_turtle.penup()
 
 # initializes step counter
 step_count = 0
-
 
 # start stop resume buttons
 # button_frame = Canvas(root)
@@ -217,7 +242,7 @@ image_button.pack(side="right", padx=10, pady=5)
 running = False
 paused = False
 
-img = Image.new("RGB", (window_size * 2, window_size * 2), color="white")
+img = Image.new("RGB", (map_size * 2, map_size * 2), color="white")
 draw = ImageDraw.Draw(img)
 
 root.mainloop()
