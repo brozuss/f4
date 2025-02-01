@@ -29,11 +29,11 @@
    - rozpakuj plik main.zip
 2. Stwórz środowisko - otwórz CMD (wiersz poleceń)
     - Przejdź do katalogu "\f4-main"
-    - "pip install virtualvenv"
+    - "pip install virtualenv"
     - "python -m venv venv"
     - Uruchom środowisko wirtualne:
       - UNIX - "source venv/scripts/activate" 
-      - WINDOWS - "venv/Scripts/activate.bat"
+      - WINDOWS - "venv\Scripts\activate.bat"
 3. Zainstaluj biblioteki (cofnij się do \f4-main:
    - "pip install -r requirements.txt"
 
@@ -46,7 +46,10 @@
     - "-KOLOR-" - kolor mrówki (domyślnie: fioletowy).
     - "-ROZMIAR-" - rozmiar planszy (domyślnie 600x600)
     - "-PRĘDKOŚĆ-" - prędkość poruszania sie mrówki (domyślnie 0.01, - ilość sekund na krok)
-    - 
+      
+   2.1 Przykłady użycia:
+     python main.py --color red --step 20 --cells 50
+     python main.py --color red --size 600x600
 3. Obsługa:
     - Po uruchomieniu zobaczysz okno GUI z przyciskami:
       - Start - rozpoczęcie symulacji
