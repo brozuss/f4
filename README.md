@@ -42,14 +42,14 @@
     - "python main.py"
    
 2. Uruchomienie z parametrami:
-    - "python --color ~KOLOR~ -size ~ROZMIAR~ --speed ~PRĘDKOŚĆ~"
-    - "-KOLOR-" - kolor mrówki (domyślnie: fioletowy).
-    - "-ROZMIAR-" - rozmiar planszy (domyślnie 600x600)
-    - "-PRĘDKOŚĆ-" - prędkość poruszania sie mrówki (domyślnie 0.01, - ilość sekund na krok)
+    - "python --color .KOLOR. -size .ROZMIAR. --speed .PRĘDKOŚĆ."
+    - ".KOLOR." - kolor mrówki (domyślnie: fioletowy).
+    - ".ROZMIAR." - rozmiar planszy (domyślnie 600x600)
+    - ".PRĘDKOŚĆ." - prędkość poruszania sie mrówki (domyślnie 0.01, - ilość sekund na krok)
       
    2.1 Przykłady użycia:
-     python main.py --color red --step 20 --cells 50
-     python main.py --color red --size 600x600
+     python main.py --color red --size 400 --speed 1   ~~ Program uruchomi się z czerwoną mrówką planszą o rozmiarze 400x400 oraz prędkością - 1 ruch na sekundę
+
 3. Obsługa:
     - Po uruchomieniu zobaczysz okno GUI z przyciskami:
       - Start - rozpoczęcie symulacji
